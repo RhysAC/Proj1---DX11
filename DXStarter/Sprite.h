@@ -7,7 +7,6 @@
 #include "SpriteBatch.h"
 #include "D3DUtil.h"
 
-//handy rectangle definer
 struct RECTF
 {
 	float left, top, right, bottom;
@@ -16,9 +15,6 @@ struct RECTF
 	}
 };
 
-/*
-Wrap up sprite rendering and movement
-*/
 class Sprite
 {
 public:

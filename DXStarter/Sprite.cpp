@@ -10,6 +10,7 @@ using namespace DirectX::SimpleMath;
 void Sprite::SetTex(ID3D11ShaderResourceView& tex, const RECTF& texRect)
 {
 	mpTex = &tex;
+	mTexRect = texRect;
 }
 
 void Sprite::Draw(SpriteBatch& batch)

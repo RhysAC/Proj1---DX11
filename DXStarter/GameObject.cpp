@@ -1,5 +1,6 @@
 #include "GameObject.h"
 
+using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
@@ -7,14 +8,14 @@ GameObject::GameObject()
 {
 }
 
-void GameObject::Init(MyD3D& d3d) 
+void GameObject::Init(string& tag) 
 {
-	spr.mpTex = spr.LoadTexture(L"../bin/data/Player-Sprite-Test.dds", d3d.GetDevice());
+	mTag = tag;
+	spr.mPos = { 300, 200 };
 }
 
 void GameObject::Update() 
 {
-	spr.mPos = { 300, 200 };
 }
 
 void GameObject::Render(SpriteBatch& batch) 

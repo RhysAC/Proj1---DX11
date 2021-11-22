@@ -1,5 +1,6 @@
 #include "Game.h"
 
+using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
@@ -18,7 +19,9 @@ void Game::ReleaseGame()
 
 void Game::Init(MyD3D& d3d)
 {
-	mPlayer.Init(d3d);
+	string pTag = "Player";
+	mPlayer.spr.SetTex(*mPlayer.spr.LoadTexture(L"../bin/data/Player-Sprite-Test.dds", d3d.GetDevice()), {0,0,200,200});
+	mPlayer.Init(pTag);
 	objects.insert(objects.begin(), 1, mPlayer);
 }
 

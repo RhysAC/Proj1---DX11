@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-
+# include <string>
 #include "D3D.h"
 #include "SpriteBatch.h"
 #include "GameObject.h"
