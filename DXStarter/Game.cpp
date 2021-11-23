@@ -19,17 +19,20 @@ void Game::ReleaseGame()
 
 void Game::Init(MyD3D& d3d)
 {
-	string pTag = "Player";
 	mPlayer.spr.SetTex(*mPlayer.spr.LoadTexture(L"../bin/data/Player-Sprite-Test.dds", d3d.GetDevice()), {0,0,200,200});
-	mPlayer.Init(pTag);
-	objects.insert(objects.begin(), 1, mPlayer);
+	objects.push_back(&mPlayer);
+
+	for (size_t i = 0; i < objects.size(); ++i)
+	{
+		objects[i]->Init();
+	}
 }
 
 void Game::Update(float dTime, MyD3D& d3d)
 {
 	for (size_t i = 0; i < objects.size(); ++i) 
 	{
-		objects[i].Update();
+		objects[i]->Update();
 	}
 }
 
@@ -42,7 +45,7 @@ void Game::Render(float dTime, MyD3D& d3d)
 	mSpriteBatch->Begin();
 	for (size_t i = 0; i < objects.size(); ++i)
 	{
-		objects[i].Render(*mSpriteBatch);
+		objects[i]->Render(*mSpriteBatch);
 	}
 	mSpriteBatch->End();
 

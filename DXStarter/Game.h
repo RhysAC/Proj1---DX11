@@ -4,6 +4,7 @@
 #include "D3D.h"
 #include "SpriteBatch.h"
 #include "GameObject.h"
+#include "Player.h"
 
 class Game
 {
@@ -15,7 +16,9 @@ public:
 	void Render(float dTime, MyD3D& d3d);
 private:
 	DirectX::SpriteBatch* mSpriteBatch = nullptr;
-	GameObject mPlayer;	
-	std::vector<GameObject> objects;
+	int id = 1;
+	Player mPlayer;	
+	GameObject mEnemy;
+	std::vector<GameObject*> objects;
 };
 

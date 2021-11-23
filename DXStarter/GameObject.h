@@ -9,12 +9,12 @@ class GameObject
 {
 public:
 	GameObject();
-	void Init(std::string& tag);
-	void Update();
+	virtual void Init() {};
+	virtual void Update();
 	void Render(DirectX::SpriteBatch& batch);
 	Sprite spr;
 
-	std::string mTag;
+	int mID;
 
 	bool colliding;
 	bool active;
