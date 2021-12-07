@@ -4,7 +4,7 @@
 #include <future>
 #include "SpriteBatch.h"
 #include "SpriteFont.h"
-
+#include "Input.h"
 #include "Mesh.h"
 #include "Model.h"
 #include "singleton.h"
@@ -27,12 +27,13 @@ public:
 	LRESULT WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
-	DirectX::SimpleMath::Vector3 mCamPos = DirectX::SimpleMath::Vector3(0, 15, -3);
+	DirectX::SimpleMath::Vector3 mCamPos;
 
 	//stick all models in a vector and use an enum to index them
 	std::vector<Model> mModels;
-	enum Modelid { FLOOR, BACK_WALL, LEFT_WALL, RIGHT_WALL, SUCK, TOTAL=5 }; 
+	enum Modelid { FLOOR, BACK_WALL, BOTTOM_WALL, LEFT_WALL, RIGHT_WALL, SUCK, TOTAL=6 }; 
 
+	MouseAndKeys sMKIn;
 private:
 
 	//spin some models around
