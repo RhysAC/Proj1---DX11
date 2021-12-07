@@ -35,9 +35,7 @@ public:
 
 	MouseAndKeys sMKIn;
 private:
-
-	//spin some models around
-	float mAngle = 0;
+	const float worldOffset = 0.3f;
 	//printing text
 	DirectX::SpriteBatch *mpFontBatch = nullptr;
 	DirectX::SpriteFont *mpFont = nullptr;

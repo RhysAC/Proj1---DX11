@@ -88,9 +88,9 @@ void Game::Release()
 
 void Game::Update(float dTime)
 {
-	mAngle += dTime * 0.5f;
 	Vector2 mouse{ Game::sMKIn.GetMousePos(true) };
 	Vector3 pos{ mModels[Modelid::SUCK].GetPosition() };
+	float rotation = mModels[Modelid::SUCK].GetRotation().y;
 
 	if (Game::sMKIn.IsPressed(VK_W) ||
 		Game::sMKIn.IsPressed(VK_S) ||
@@ -107,17 +107,27 @@ void Game::Update(float dTime)
 			pos.x -= 1 * dTime;
 	}
 
-	if (pos.z >= mModels[Modelid::BACK_WALL].GetPosition().z - 0.2f)
-		pos.z = mModels[Modelid::BACK_WALL].GetPosition().z -0.2f;
-	if (pos.z <= mModels[Modelid::BOTTOM_WALL].GetPosition().z + 0.2f)
-		pos.z = mModels[Modelid::BOTTOM_WALL].GetPosition().z + 0.2f;
-	if (pos.x <= mModels[Modelid::LEFT_WALL].GetPosition().x + 0.2f)
-		pos.x = mModels[Modelid::LEFT_WALL].GetPosition().x + 0.2f;
-	if (pos.x >= mModels[Modelid::RIGHT_WALL].GetPosition().x - 0.2f)
-		pos.x = mModels[Modelid::RIGHT_WALL].GetPosition().x - 0.2f;
+	if (Game::sMKIn.IsPressed(VK_LEFT) ||
+		Game::sMKIn.IsPressed(VK_RIGHT)) 
+	{
+		if (Game::sMKIn.IsPressed(VK_LEFT))
+			rotation -= 2 * dTime;
+		else if (Game::sMKIn.IsPressed(VK_RIGHT))
+			rotation += 2 * dTime;
+	}
+
+	if (pos.z >= mModels[Modelid::BACK_WALL].GetPosition().z - worldOffset)
+		pos.z = mModels[Modelid::BACK_WALL].GetPosition().z -worldOffset;
+	if (pos.z <= mModels[Modelid::BOTTOM_WALL].GetPosition().z + worldOffset)
+		pos.z = mModels[Modelid::BOTTOM_WALL].GetPosition().z + worldOffset;
+	if (pos.x <= mModels[Modelid::LEFT_WALL].GetPosition().x + worldOffset)
+		pos.x = mModels[Modelid::LEFT_WALL].GetPosition().x + worldOffset;
+	if (pos.x >= mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset)
+		pos.x = mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset;
 
 	mCamPos = Vector3(pos.x, 15, pos.z - 2);
 	mModels[Modelid::SUCK].GetPosition() = pos;
+	mModels[Modelid::SUCK].GetRotation().y = rotation;
 }
 
 void Game::Render(float dTime)
@@ -130,19 +140,10 @@ void Game::RenderGame(float dTime)
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	d3d.BeginRender(Colours::Black);
 
-	float alpha = 0.5f + sinf(mAngle * 2)*0.5f;
-
 	d3d.GetFX().SetPerFrameConsts(d3d.GetDeviceCtx(), mCamPos);
 
 	CreateViewMatrix(d3d.GetFX().GetViewMatrix(), mCamPos, mModels[Modelid::SUCK].GetPosition(), Vector3(0, 1, 0));
-	CreateProjectionMatrix(d3d.GetFX().GetProjectionMatrix(), 0.25f*PI, WinUtil::Get().GetAspectRatio(), 1, 1000.f);
-	Matrix w = Matrix::CreateRotationY(sinf(mAngle));
-	d3d.GetFX().SetPerObjConsts(d3d.GetDeviceCtx(), w);
-
-	//main cube - forced transparency under pogram control
-	Vector3 dir = Vector3(1, 0, 0);
-	Matrix m = Matrix::CreateRotationY(mAngle);
-	dir = dir.TransformNormal(dir, m);
+	CreateProjectionMatrix(d3d.GetFX().GetProjectionMatrix(), 0.25f * PI, WinUtil::Get().GetAspectRatio(), 1, 1000.f);
 
 
 	//render all models
