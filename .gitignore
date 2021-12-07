@@ -6,6 +6,10 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.cso
+*.dll
+![Bb]in/assimp-vc140-mt.dll
+![Bb]in/data/the_rock/TheRock2.obj
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -19,7 +23,7 @@
 [Xx]86/
 [Bb]uild/
 bld/
-[Bb]in/
+[Bb]in/*.exe
 [Oo]bj/
 
 # Visual Studio 2015 cache/options directory
