@@ -8,6 +8,8 @@
 #include "Mesh.h"
 #include "Model.h"
 #include "singleton.h"
+#include "Map.h"
+#include "GameUtils.h"
 
 /*
 Display a small scene and spin some models around
@@ -31,9 +33,10 @@ public:
 
 	//stick all models in a vector and use an enum to index them
 	std::vector<Model> mModels;
-	enum Modelid { FLOOR, BACK_WALL, BOTTOM_WALL, LEFT_WALL, RIGHT_WALL, SUCK, TOTAL=6 }; 
+	enum Modelid { SUCK, TOTAL=1 }; 
 
 	MouseAndKeys sMKIn;
+	Map mMap;
 private:
 	const float worldOffset = 0.3f;
 	//printing text

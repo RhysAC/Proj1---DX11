@@ -7,56 +7,15 @@ using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-void Setup(Model& m, Mesh& source, const Vector3& scale, const Vector3& pos, const Vector3& rot)
-{
-	m.Initialise(source);
-	m.GetScale() = scale;
-	m.GetPosition() = pos;
-	m.GetRotation() = rot;
-}
-
-void Setup(Model& m, Mesh& source, float scale, const Vector3& pos, const Vector3& rot)
-{
-	Setup(m, source, Vector3(scale, scale, scale), pos, rot);
-}
-
 void Game::Load()
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 
+	mMap.Init();
 	Model m;
 	mModels.insert(mModels.begin(), Modelid::TOTAL, m);
 
-	Mesh& quadMesh = BuildQuad(d3d.GetMeshMgr());
 	Mesh& cubeMesh = BuildCube(d3d.GetMeshMgr());
-
-	//quad wood floor
-	Setup(mModels[Modelid::FLOOR], quadMesh, Vector3(5, 1, 4), Vector3(0, -1, -1), Vector3(0, 0, 0));
-	Material mat;
-	mat = mModels[Modelid::FLOOR].GetMesh().GetSubMesh(0).material;
-	mat.gfxData.Set(Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 1));
-	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "floor.dds");
-	mat.texture = "floor.dds";
-	mModels[Modelid::FLOOR].SetOverrideMat(&mat);
-
-	//Back wall
-	Setup(mModels[Modelid::BACK_WALL], quadMesh, Vector3(5, 1, 1.75f), Vector3(0, 0.75f, 3), Vector3(-PI/2, 0, 0));
-	mat.gfxData.Set(Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 1));
-	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(),"wall.dds");
-	mat.texture = "wall.dds";
-	mModels[Modelid::BACK_WALL].SetOverrideMat(&mat);
-
-	//left wall
-	Setup(mModels[Modelid::LEFT_WALL], quadMesh, Vector3(4, 1, 1.75f), Vector3(-5, 0.75f, -1), Vector3(-PI/2, -PI/2, 0));
-	mModels[Modelid::LEFT_WALL].SetOverrideMat(&mat);
-
-	//Right wall
-	Setup(mModels[Modelid::RIGHT_WALL], quadMesh, Vector3(4, 1, 1.75f), Vector3(5, 0.75f, -1), Vector3(-PI / 2, PI / 2, 0));
-	mModels[Modelid::RIGHT_WALL].SetOverrideMat(&mat);
-
-	//Bottom wall
-	Setup(mModels[Modelid::BOTTOM_WALL], quadMesh, Vector3(5, 1, 1.75f), Vector3(0, 0.75f, -5), Vector3(-PI / 2, PI, 0));
-	mModels[Modelid::BOTTOM_WALL].SetOverrideMat(&mat);
 
 	// Player for now 
 	Mesh& sm = d3d.GetMeshMgr().CreateMesh("suck");
@@ -116,14 +75,14 @@ void Game::Update(float dTime)
 			rotation += 2 * dTime;
 	}
 
-	if (pos.z >= mModels[Modelid::BACK_WALL].GetPosition().z - worldOffset)
+	/*if (pos.z >= mModels[Modelid::BACK_WALL].GetPosition().z - worldOffset)
 		pos.z = mModels[Modelid::BACK_WALL].GetPosition().z -worldOffset;
 	if (pos.z <= mModels[Modelid::BOTTOM_WALL].GetPosition().z + worldOffset)
 		pos.z = mModels[Modelid::BOTTOM_WALL].GetPosition().z + worldOffset;
 	if (pos.x <= mModels[Modelid::LEFT_WALL].GetPosition().x + worldOffset)
 		pos.x = mModels[Modelid::LEFT_WALL].GetPosition().x + worldOffset;
 	if (pos.x >= mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset)
-		pos.x = mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset;
+		pos.x = mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset;*/
 
 	mCamPos = Vector3(pos.x, 15, pos.z - 2);
 	mModels[Modelid::SUCK].GetPosition() = pos;
@@ -149,6 +108,8 @@ void Game::RenderGame(float dTime)
 	//render all models
 	for (auto& mod : mModels)
 		d3d.GetFX().Render(mod);
+
+	mMap.Render();
 
 	d3d.EndRender();
 }
