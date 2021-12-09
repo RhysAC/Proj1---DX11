@@ -10,17 +10,12 @@ using namespace DirectX::SimpleMath;
 void Game::Load()
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
-
-	mMap.Init();
 	Model m;
-	mModels.insert(mModels.begin(), Modelid::TOTAL, m);
 
-	Mesh& cubeMesh = BuildCube(d3d.GetMeshMgr());
+	mMap.Init(m);
+	mPlayer.Init();
 
-	// Player for now 
-	Mesh& sm = d3d.GetMeshMgr().CreateMesh("suck");
-	sm.CreateFrom("data/two_mat_cube.fbx", d3d);
-	Setup(mModels[Modelid::SUCK], sm, 0.045f, Vector3(0, 0, -2), Vector3(PI / 2.f, 0, 0));
+	mObjects.push_back(&mPlayer);
 
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 }
@@ -32,7 +27,7 @@ void Game::Initialise()
 	assert(mpFontBatch);
 	mpFont = new SpriteFont(&d3d.GetDevice(), L"../bin/data/fonts/algerian.spritefont");
 	assert(mpFont);
-	sMKIn.Initialise(WinUtil::Get().GetMainWnd(), true, false);
+	mPlayer.sMKIn.Initialise(WinUtil::Get().GetMainWnd(), true, false);
 
 	Load();
 }
@@ -47,32 +42,9 @@ void Game::Release()
 
 void Game::Update(float dTime)
 {
-	Vector2 mouse{ Game::sMKIn.GetMousePos(true) };
-	Vector3 pos{ mModels[Modelid::SUCK].GetPosition() };
-	float rotation = mModels[Modelid::SUCK].GetRotation().y;
-
-	if (Game::sMKIn.IsPressed(VK_W) ||
-		Game::sMKIn.IsPressed(VK_S) ||
-		Game::sMKIn.IsPressed(VK_D) ||
-		Game::sMKIn.IsPressed(VK_A))
+	for (size_t i = 0; i < mObjects.size(); ++i)
 	{
-		if (Game::sMKIn.IsPressed(VK_W))
-			pos.z += 1 * dTime;
-		else if (Game::sMKIn.IsPressed(VK_S))
-			pos.z -= 1 * dTime;
-		if (Game::sMKIn.IsPressed(VK_D))
-			pos.x += 1 * dTime;
-		else if (Game::sMKIn.IsPressed(VK_A))
-			pos.x -= 1 * dTime;
-	}
-
-	if (Game::sMKIn.IsPressed(VK_LEFT) ||
-		Game::sMKIn.IsPressed(VK_RIGHT)) 
-	{
-		if (Game::sMKIn.IsPressed(VK_LEFT))
-			rotation -= 2 * dTime;
-		else if (Game::sMKIn.IsPressed(VK_RIGHT))
-			rotation += 2 * dTime;
+		mObjects[i]->Update(dTime);
 	}
 
 	/*if (pos.z >= mModels[Modelid::BACK_WALL].GetPosition().z - worldOffset)
@@ -84,9 +56,7 @@ void Game::Update(float dTime)
 	if (pos.x >= mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset)
 		pos.x = mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset;*/
 
-	mCamPos = Vector3(pos.x, 15, pos.z - 2);
-	mModels[Modelid::SUCK].GetPosition() = pos;
-	mModels[Modelid::SUCK].GetRotation().y = rotation;
+	mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 15, mPlayer.mModel.GetPosition().z - 2);
 }
 
 void Game::Render(float dTime)
@@ -101,15 +71,15 @@ void Game::RenderGame(float dTime)
 
 	d3d.GetFX().SetPerFrameConsts(d3d.GetDeviceCtx(), mCamPos);
 
-	CreateViewMatrix(d3d.GetFX().GetViewMatrix(), mCamPos, mModels[Modelid::SUCK].GetPosition(), Vector3(0, 1, 0));
+	CreateViewMatrix(d3d.GetFX().GetViewMatrix(), mCamPos, mPlayer.mModel.GetPosition(), Vector3(0, 1, 0));
 	CreateProjectionMatrix(d3d.GetFX().GetProjectionMatrix(), 0.25f * PI, WinUtil::Get().GetAspectRatio(), 1, 1000.f);
-
-
-	//render all models
-	for (auto& mod : mModels)
-		d3d.GetFX().Render(mod);
-
+	
 	mMap.Render();
+
+	for (size_t i = 0; i < mObjects.size(); ++i) 
+	{
+		mObjects[i]->Render();
+	}
 
 	d3d.EndRender();
 }
@@ -130,7 +100,7 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 			return 0;
 		}
 	case WM_INPUT:
-		Game::sMKIn.MessageEvent((HRAWINPUT)lParam);
+		mPlayer.sMKIn.MessageEvent((HRAWINPUT)lParam);
 		break;
 	}
 	//default message handling (resize window, full screen, etc)

@@ -10,7 +10,8 @@
 #include "singleton.h"
 #include "Map.h"
 #include "GameUtils.h"
-
+#include "GameObject.h"
+#include "Player.h"
 /*
 Display a small scene and spin some models around
 */
@@ -31,12 +32,10 @@ public:
 	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
 	DirectX::SimpleMath::Vector3 mCamPos;
 
-	//stick all models in a vector and use an enum to index them
-	std::vector<Model> mModels;
-	enum Modelid { SUCK, TOTAL=1 }; 
+	std::vector<GameObject*> mObjects;
 
-	MouseAndKeys sMKIn;
 	Map mMap;
+	Player mPlayer;
 private:
 	const float worldOffset = 0.3f;
 	//printing text

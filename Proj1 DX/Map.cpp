@@ -7,11 +7,10 @@ using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-void Map::Init() 
+void Map::Init(Model& m) 
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 
-	Model m;
 	mModels.insert(mModels.begin(), Modelid::TOTAL, m);
 
 	Mesh& quadMesh = BuildQuad(d3d.GetMeshMgr());
