@@ -11,22 +11,19 @@ void Game::Load()
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	Model m;
-
-	mMap.Init(m);
+	Mesh& quadMesh = BuildQuad(d3d.GetMeshMgr());
+	Mesh& cubeMesh = BuildCube(d3d.GetMeshMgr());
+	mMap.Init(m, quadMesh);
 	mPlayer.Init();
-
+	mEnemy.Init(mPlayer);
 	mObjects.push_back(&mPlayer);
+	mObjects.push_back(&mEnemy);
 
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 }
 
 void Game::Initialise()
 {
-	MyD3D& d3d = WinUtil::Get().GetD3D();
-	mpFontBatch = new SpriteBatch(&d3d.GetDeviceCtx());
-	assert(mpFontBatch);
-	mpFont = new SpriteFont(&d3d.GetDevice(), L"../bin/data/fonts/algerian.spritefont");
-	assert(mpFont);
 	mPlayer.sMKIn.Initialise(WinUtil::Get().GetMainWnd(), true, false);
 
 	Load();
@@ -34,10 +31,6 @@ void Game::Initialise()
 
 void Game::Release()
 {
-	delete mpFontBatch;
-	mpFontBatch = nullptr;
-	delete mpFont;
-	mpFont = nullptr;
 }
 
 void Game::Update(float dTime)

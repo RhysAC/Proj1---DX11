@@ -10,10 +10,6 @@ class GameObject
 {
 public:
 	GameObject(){}
-	virtual void Init(Model& m) 
-	{
-		mSpeed = mSpeed;
-	}
 	virtual void Update(float dTime)
 	{
 		mSpeed = mSpeed;

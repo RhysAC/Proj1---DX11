@@ -12,7 +12,6 @@ void Model::Initialise(const std::string& meshFileName)
 	
 }
 
-
 void Model::Initialise(Mesh &mesh)
 {
 	mpMesh = &mesh;

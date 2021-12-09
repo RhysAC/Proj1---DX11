@@ -7,7 +7,7 @@ class Map
 {
 public:
 	Map(){}
-	void Init(Model& m);
+	void Init(Model& m, Mesh& mesh);
 	void Render();
 
 	std::vector<Model> mModels;

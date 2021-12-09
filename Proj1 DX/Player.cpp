@@ -7,11 +7,11 @@ using namespace DirectX::SimpleMath;
 void Player::Init() 
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
-	Mesh& cubeMesh = BuildCube(d3d.GetMeshMgr());
 	// Player for now 
 	Mesh& sm = d3d.GetMeshMgr().CreateMesh("suck");
 	sm.CreateFrom("data/two_mat_cube.fbx", d3d);
 	Setup(mModel, sm, 0.045f, Vector3(0, 0, -2), Vector3(PI / 2.f, 0, 0));
+	mSpeed = 2;
 }
 
 void Player::Update(float dTime)
@@ -30,22 +30,22 @@ void Player::HandleInput(float dTime)
 		sMKIn.IsPressed(VK_A))
 	{
 		if (sMKIn.IsPressed(VK_W))
-			pos.z += 1 * dTime;
+			pos.z += mSpeed * dTime;
 		else if (sMKIn.IsPressed(VK_S))
-			pos.z -= 1 * dTime;
+			pos.z -= mSpeed * dTime;
 		if (sMKIn.IsPressed(VK_D))
-			pos.x += 1 * dTime;
+			pos.x += mSpeed * dTime;
 		else if (sMKIn.IsPressed(VK_A))
-			pos.x -= 1 * dTime;
+			pos.x -= mSpeed * dTime;
 	}
 
 	if (sMKIn.IsPressed(VK_LEFT) ||
 		sMKIn.IsPressed(VK_RIGHT))
 	{
 		if (sMKIn.IsPressed(VK_LEFT))
-			rotation -= 2 * dTime;
+			rotation -= mSpeed * dTime;
 		else if (sMKIn.IsPressed(VK_RIGHT))
-			rotation += 2 * dTime;
+			rotation += mSpeed * dTime;
 	}
 
 	mModel.GetPosition() = pos;
