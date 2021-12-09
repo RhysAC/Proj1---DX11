@@ -4,8 +4,9 @@ using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-void Player::Init() 
+void Player::Init(BulletMgr& mgr)
 {
+	pBulletMgr = &mgr;
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	// Player for now 
 	Mesh& sm = d3d.GetMeshMgr().CreateMesh("suck");
@@ -48,8 +49,24 @@ void Player::HandleInput(float dTime)
 			rotation += mSpeed * dTime;
 	}
 
+	Vector3 aimDirNorm = Getdirection(Vector3{ 0,0,0 }, mModel.GetPosition());
+	if (sMKIn.IsPressed(VK_SPACE))
+		FireBullet(pos, aimDirNorm);
+
 	mModel.GetPosition() = pos;
 	mModel.GetRotation().y = rotation;
+}
+
+void Player::FireBullet(Vector3& pos, Vector3& aimDirNorm)
+{
+	Bullet* b = pBulletMgr->NewBullet();
+	if (b)
+	{
+		b->active = true;
+		b->mModel.GetRotation().y = mModel.GetRotation().y;
+		b->currentVel = aimDirNorm * b->maxSpeed;
+		b->mModel.GetPosition() = pos;
+	}
 }
 
 void Player::Render() 

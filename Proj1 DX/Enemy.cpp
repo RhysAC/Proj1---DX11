@@ -8,7 +8,6 @@ void Enemy::Init(Player& player)
 {
 	pPlayer = &player;
 	MyD3D& d3d = WinUtil::Get().GetD3D();
-	// Player for now 
 	Mesh& sm = d3d.GetMeshMgr().CreateMesh("enemy");
 	sm.CreateFrom("data/two_mat_cube.fbx", d3d);
 	Setup(mModel, sm, 0.045f, Vector3(5, 0, 5), Vector3(-PI / 2, 0, 0));

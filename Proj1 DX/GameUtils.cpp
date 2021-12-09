@@ -31,12 +31,3 @@ Vector3 GetCurrentVel(Vector3& dir, float speed)
 	currentVel = dir * speed;
 	return currentVel;
 }
-
-float LookAt(Vector3& pos, Vector3& otherPos)
-{
-	float dx = pos.x - otherPos.x;
-	float dz = pos.z - otherPos.z;
-
-	float rotation = (atan2(dz, dx)) * 180 / PI ;
-	return rotation;
-}

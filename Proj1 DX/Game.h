@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Bullet.h"
 /*
 Display a small scene and spin some models around
 */
@@ -38,6 +39,7 @@ public:
 	Map mMap;
 	Player mPlayer;
 	Enemy mEnemy;
+	BulletMgr mBulletMgr;
 private:
 	const float worldOffset = 0.3f;
 	//printing text

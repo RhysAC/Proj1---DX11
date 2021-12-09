@@ -12,12 +12,13 @@ void Game::Load()
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	Model m;
 	Mesh& quadMesh = BuildQuad(d3d.GetMeshMgr());
-	Mesh& cubeMesh = BuildCube(d3d.GetMeshMgr());
 	mMap.Init(m, quadMesh);
-	mPlayer.Init();
+	mPlayer.Init(mBulletMgr);
 	mEnemy.Init(mPlayer);
 	mObjects.push_back(&mPlayer);
 	mObjects.push_back(&mEnemy);
+	for (Bullet& b : mBulletMgr.bullets)
+		mObjects.push_back(&b);
 
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 }
@@ -40,6 +41,7 @@ void Game::Update(float dTime)
 		mObjects[i]->Update(dTime);
 	}
 
+	mBulletMgr.Update(dTime);
 	/*if (pos.z >= mModels[Modelid::BACK_WALL].GetPosition().z - worldOffset)
 		pos.z = mModels[Modelid::BACK_WALL].GetPosition().z -worldOffset;
 	if (pos.z <= mModels[Modelid::BOTTOM_WALL].GetPosition().z + worldOffset)
@@ -73,6 +75,8 @@ void Game::RenderGame(float dTime)
 	{
 		mObjects[i]->Render();
 	}
+
+	mBulletMgr.Render();
 
 	d3d.EndRender();
 }

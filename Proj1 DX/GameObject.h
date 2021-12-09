@@ -6,6 +6,7 @@
 #include "GeometryBuilder.h"
 #include "D3D.h"
 #include "Input.h"
+
 class GameObject
 {
 public:
@@ -21,5 +22,6 @@ public:
 
 	Model mModel;
 	float mSpeed = 0;
+	bool active = false;
 };
 
