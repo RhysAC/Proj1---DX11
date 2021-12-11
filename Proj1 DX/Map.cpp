@@ -14,7 +14,7 @@ void Map::Init(Model& m, Mesh& mesh)
 	mModels.insert(mModels.begin(), Modelid::TOTAL, m);
 
 	//quad wood floor
-	Setup(mModels[Modelid::FLOOR], mesh, Vector3(5, 1, 4), Vector3(0, -1, -1), Vector3(0, 0, 0));
+	Setup(mModels[Modelid::FLOOR], mesh, Vector3(5, 1, 20), Vector3(0, -1, 0), Vector3(0, 0, 0));
 	Material mat;
 	mat = mModels[Modelid::FLOOR].GetMesh().GetSubMesh(0).material;
 	mat.gfxData.Set(Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 1));
@@ -22,24 +22,8 @@ void Map::Init(Model& m, Mesh& mesh)
 	mat.texture = "floor.dds";
 	mModels[Modelid::FLOOR].SetOverrideMat(&mat);
 
-	//Back wall
-	Setup(mModels[Modelid::BACK_WALL], mesh, Vector3(5, 1, 1.75f), Vector3(0, 0.75f, 3), Vector3(-PI / 2, 0, 0));
-	mat.gfxData.Set(Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 1));
-	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "wall.dds");
-	mat.texture = "wall.dds";
-	mModels[Modelid::BACK_WALL].SetOverrideMat(&mat);
-
-	//left wall
-	Setup(mModels[Modelid::LEFT_WALL], mesh, Vector3(4, 1, 1.75f), Vector3(-5, 0.75f, -1), Vector3(-PI / 2, -PI / 2, 0));
-	mModels[Modelid::LEFT_WALL].SetOverrideMat(&mat);
-
-	//Right wall
-	Setup(mModels[Modelid::RIGHT_WALL], mesh, Vector3(4, 1, 1.75f), Vector3(5, 0.75f, -1), Vector3(-PI / 2, PI / 2, 0));
-	mModels[Modelid::RIGHT_WALL].SetOverrideMat(&mat);
-
-	//Bottom wall
-	Setup(mModels[Modelid::BOTTOM_WALL], mesh, Vector3(5, 1, 1.75f), Vector3(0, 0.75f, -5), Vector3(-PI / 2, PI, 0));
-	mModels[Modelid::BOTTOM_WALL].SetOverrideMat(&mat);
+	Setup(mModels[Modelid::FLOOR2], mesh, Vector3(5, 1, 20), Vector3(0, -1, 40), Vector3(0, 0, 0));
+	mModels[Modelid::FLOOR2].SetOverrideMat(&mat);
 }
 
 void Map::Render() 
@@ -49,4 +33,20 @@ void Map::Render()
 	//render all models
 	for (auto& mod : mModels)
 		d3d.GetFX().Render(mod);
+}
+
+void Map::Scroll(float dTime) 
+{
+	mModels[Modelid::FLOOR].GetPosition().z -= 20 * dTime;
+	mModels[Modelid::FLOOR2].GetPosition().z -= 20 * dTime;
+
+	if (mModels[Modelid::FLOOR].GetPosition().z <= -20) 
+	{
+		mModels[Modelid::FLOOR].GetPosition().z = mModels[Modelid::FLOOR2].GetPosition().z + 40;
+	}
+
+	if (mModels[Modelid::FLOOR2].GetPosition().z <= -20)
+	{
+		mModels[Modelid::FLOOR2].GetPosition().z = mModels[Modelid::FLOOR].GetPosition().z + 40;
+	}
 }

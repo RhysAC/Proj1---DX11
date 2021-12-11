@@ -1,7 +1,7 @@
 #include "WindowUtils.h"
 #include "D3D.h"
 #include "Game.h"
-
+#include <ctime>
 using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -27,7 +27,7 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	PSTR cmdLine, int showCmd)
 {
-
+	srand(time(NULL));
 	int w(1024), h(768);
 	if (!WinUtil::Get().InitMainWindow(w, h, hInstance, "Fezzy", MainWndProc, true))
 		assert(false);

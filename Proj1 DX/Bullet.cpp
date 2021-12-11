@@ -9,7 +9,7 @@ void Bullet::Init(int num)
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	Mesh& sm = d3d.GetMeshMgr().CreateMesh("bullet" + num);
 	sm.CreateFrom("data/two_mat_cube.fbx", d3d);
-	Setup(mModel, sm, 0.045f, Vector3(0, 0, -2), Vector3(PI / 2.f, 0, 0));
+	Setup(mModel, sm, 0.045f, Vector3(0, 0, 0), Vector3(PI / 2.f, 0, 0));
 }
 
 void BulletMgr::Update(float dTime)
@@ -22,7 +22,7 @@ void BulletMgr::Update(float dTime)
 			bullets[i].timer += dTime;
 			bullets[i].mModel.GetPosition() += bullets[i].currentVel * dTime;
 			//If the bullet exists for too long we erase it to save on performance
-			if(bullets[i].timer > 4)
+			if(bullets[i].timer >= 4)
 			{
 				bullets[i].active = false;
 				bullets[i].timer = 0;

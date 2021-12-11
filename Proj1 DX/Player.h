@@ -11,6 +11,6 @@ public:
 	void HandleInput(float dTime);
 	void FireBullet(DirectX::SimpleMath::Vector3& pos, DirectX::SimpleMath::Vector3& aimDirNorm);
 	MouseAndKeys sMKIn;
-	BulletMgr* pBulletMgr;
+	BulletMgr* pBulletMgr = nullptr;
 };
 

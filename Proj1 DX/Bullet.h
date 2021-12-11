@@ -16,7 +16,7 @@ class BulletMgr
 public:
 	BulletMgr()
 	{
-		bullets.insert(bullets.begin(), 5, Bullet());
+		bullets.insert(bullets.begin(), 7, Bullet());
 
 		for (size_t i = 0; i < bullets.size(); ++i)
 			bullets[i].Init(i);

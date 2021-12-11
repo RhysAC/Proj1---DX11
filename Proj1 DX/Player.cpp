@@ -9,10 +9,10 @@ void Player::Init(BulletMgr& mgr)
 	pBulletMgr = &mgr;
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	// Player for now 
-	Mesh& sm = d3d.GetMeshMgr().CreateMesh("suck");
-	sm.CreateFrom("data/two_mat_cube.fbx", d3d);
-	Setup(mModel, sm, 0.045f, Vector3(0, 0, -2), Vector3(PI / 2.f, 0, 0));
-	mSpeed = 2;
+	Mesh& sm = d3d.GetMeshMgr().CreateMesh("player");
+	sm.CreateFrom("data/the_rock/TheRock2.obj", d3d);
+	Setup(mModel, sm, 0.005f, Vector3(0, 0, 10), Vector3(0, 0, 0));
+	mSpeed = 5;
 }
 
 void Player::Update(float dTime)
@@ -26,14 +26,9 @@ void Player::HandleInput(float dTime)
 	float rotation = mModel.GetRotation().y;
 
 	if (sMKIn.IsPressed(VK_W) ||
-		sMKIn.IsPressed(VK_S) ||
 		sMKIn.IsPressed(VK_D) ||
 		sMKIn.IsPressed(VK_A))
 	{
-		if (sMKIn.IsPressed(VK_W))
-			pos.z += mSpeed * dTime;
-		else if (sMKIn.IsPressed(VK_S))
-			pos.z -= mSpeed * dTime;
 		if (sMKIn.IsPressed(VK_D))
 			pos.x += mSpeed * dTime;
 		else if (sMKIn.IsPressed(VK_A))
@@ -49,9 +44,8 @@ void Player::HandleInput(float dTime)
 			rotation += mSpeed * dTime;
 	}
 
-	Vector3 aimDirNorm = Getdirection(Vector3{ 0,0,0 }, mModel.GetPosition());
 	if (sMKIn.IsPressed(VK_SPACE))
-		FireBullet(pos, aimDirNorm);
+		FireBullet(pos, Vector3{ 0,0,1});
 
 	mModel.GetPosition() = pos;
 	mModel.GetRotation().y = rotation;

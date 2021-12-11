@@ -9,8 +9,9 @@ public:
 	Map(){}
 	void Init(Model& m, Mesh& mesh);
 	void Render();
+	void Scroll(float dTime);
 
 	std::vector<Model> mModels;
-	enum Modelid { FLOOR, BACK_WALL, BOTTOM_WALL, LEFT_WALL, RIGHT_WALL, TOTAL = 5 };
+	enum Modelid { FLOOR, FLOOR2, TOTAL = 2 };
 };
 

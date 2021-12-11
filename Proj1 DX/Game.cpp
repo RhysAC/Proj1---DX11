@@ -14,9 +14,9 @@ void Game::Load()
 	Mesh& quadMesh = BuildQuad(d3d.GetMeshMgr());
 	mMap.Init(m, quadMesh);
 	mPlayer.Init(mBulletMgr);
-	mEnemy.Init(mPlayer);
+	mObstacle.Init(mPlayer);
 	mObjects.push_back(&mPlayer);
-	mObjects.push_back(&mEnemy);
+	mObjects.push_back(&mObstacle);
 	for (Bullet& b : mBulletMgr.bullets)
 		mObjects.push_back(&b);
 
@@ -40,18 +40,10 @@ void Game::Update(float dTime)
 	{
 		mObjects[i]->Update(dTime);
 	}
-
+	mMap.Scroll(dTime);
 	mBulletMgr.Update(dTime);
-	/*if (pos.z >= mModels[Modelid::BACK_WALL].GetPosition().z - worldOffset)
-		pos.z = mModels[Modelid::BACK_WALL].GetPosition().z -worldOffset;
-	if (pos.z <= mModels[Modelid::BOTTOM_WALL].GetPosition().z + worldOffset)
-		pos.z = mModels[Modelid::BOTTOM_WALL].GetPosition().z + worldOffset;
-	if (pos.x <= mModels[Modelid::LEFT_WALL].GetPosition().x + worldOffset)
-		pos.x = mModels[Modelid::LEFT_WALL].GetPosition().x + worldOffset;
-	if (pos.x >= mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset)
-		pos.x = mModels[Modelid::RIGHT_WALL].GetPosition().x - worldOffset;*/
 
-	mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 15, mPlayer.mModel.GetPosition().z - 2);
+	mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 7, mPlayer.mModel.GetPosition().z - 10);
 }
 
 void Game::Render(float dTime)
