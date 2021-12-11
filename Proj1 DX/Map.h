@@ -12,6 +12,6 @@ public:
 	void Scroll(float dTime);
 
 	std::vector<Model> mModels;
-	enum Modelid { FLOOR, FLOOR2, TOTAL = 2 };
+	enum Modelid { FLOOR, FLOOR2, BACKGROUND, BACKGROUND2, TOTAL = 4 };
 };
 

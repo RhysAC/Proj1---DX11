@@ -20,7 +20,7 @@ void Game::Load()
 	for (Bullet& b : mBulletMgr.bullets)
 		mObjects.push_back(&b);
 
-	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
+	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(0, -1.f, 20.f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 }
 
 void Game::Initialise()
