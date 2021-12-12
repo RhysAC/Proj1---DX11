@@ -5,7 +5,7 @@ class Player : public GameObject
 {
 public:
 	Player(){}
-	void Init(BulletMgr& mgr);
+	void Init(BulletMgr& mgr, Mesh& sm);
 	void Update(float dTime);
 	void Render();
 	void HandleInput(float dTime);

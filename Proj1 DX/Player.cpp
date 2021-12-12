@@ -4,14 +4,21 @@ using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-void Player::Init(BulletMgr& mgr)
+namespace CONSTANTS 
+{
+	const float LEFT_BOUNDS = -4;
+	const float RIGHT_BOUNDS = 4;
+}
+
+void Player::Init(BulletMgr& mgr, Mesh& sm)
 {
 	pBulletMgr = &mgr;
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	// Player for now 
-	Mesh& sm = d3d.GetMeshMgr().CreateMesh("player");
-	sm.CreateFrom("data/the_rock/TheRock2.obj", d3d);
-	Setup(mModel, sm, 0.005f, Vector3(0, 0, 10), Vector3(0, 0, 0));
+	Setup(mModel, sm, Vector3(0.5, 0.5, 0.5), Vector3(0, 0, 5), Vector3(0, 0, 0));
+	Material mat;
+	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "player.dds");
+	mModel.SetOverrideMat(&mat);
 	mSpeed = 5;
 }
 
@@ -43,6 +50,12 @@ void Player::HandleInput(float dTime)
 		else if (sMKIn.IsPressed(VK_RIGHT))
 			rotation += mSpeed * dTime;
 	}
+
+	if (pos.x <= CONSTANTS::LEFT_BOUNDS)
+		pos.x = CONSTANTS::LEFT_BOUNDS;
+	if (pos.x >= CONSTANTS::RIGHT_BOUNDS)
+		pos.x = CONSTANTS::RIGHT_BOUNDS;
+
 
 	if (sMKIn.IsPressed(VK_SPACE))
 		FireBullet(pos, Vector3{ 0,0,1});

@@ -5,7 +5,7 @@ class WallObstacle : public GameObject
 {
 public:
 	WallObstacle() {};
-	void Init(Player& player);
+	void Init(Player& player, Mesh& sm);
 	void Update(float dTime);
 	void Render();
 

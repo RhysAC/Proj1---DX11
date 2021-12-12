@@ -41,7 +41,6 @@ public:
 	WallObstacle mObstacle;
 	BulletMgr mBulletMgr;
 private:
-	const float worldOffset = 0.3f;
 	//printing text
 	DirectX::SpriteBatch *mpFontBatch = nullptr;
 	DirectX::SpriteFont *mpFont = nullptr;

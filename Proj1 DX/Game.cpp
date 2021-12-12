@@ -12,15 +12,17 @@ void Game::Load()
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	Model m;
 	Mesh& quadMesh = BuildQuad(d3d.GetMeshMgr());
+	Mesh& sm = BuildCube(d3d.GetMeshMgr());
 	mMap.Init(m, quadMesh);
-	mPlayer.Init(mBulletMgr);
-	mObstacle.Init(mPlayer);
+	mPlayer.Init(mBulletMgr, sm);
+	mObstacle.Init(mPlayer, sm);
 	mObjects.push_back(&mPlayer);
 	mObjects.push_back(&mObstacle);
 	for (Bullet& b : mBulletMgr.bullets)
 		mObjects.push_back(&b);
 
-	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(0, -1.f, 20.f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
+	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-1, -3.f, 2), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
+	d3d.GetFX().SetupDirectionalLight(1, true, Vector3(1, -3.f, 2), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 }
 
 void Game::Initialise()

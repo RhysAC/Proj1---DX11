@@ -17,24 +17,23 @@ void Map::Init(Model& m, Mesh& mesh)
 	Setup(mModels[Modelid::FLOOR], mesh, Vector3(5, 1, 20), Vector3(0, -1, 0), Vector3(0, 0, 0));
 	Material mat;
 	mat = mModels[Modelid::FLOOR].GetMesh().GetSubMesh(0).material;
-	mat.gfxData.Set(Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 1));
+	mat.gfxData.Set(Vector4(1.0f, 1.0f, 1.0f, 1), Vector4(0.9f, 0.1f, 0.1f, 1), Vector4(0.9f, 0.1f, 0.1f, 1));
 	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "runway.dds");
-	mat.texture = "runway.dds";
+	mat.flags |= Material::ALPHA_TRANSPARENCY;
 	mModels[Modelid::FLOOR].SetOverrideMat(&mat);
 
 	Setup(mModels[Modelid::FLOOR2], mesh, Vector3(5, 1, 20), Vector3(0, -1, 40), Vector3(0, 0, 0));
 	mModels[Modelid::FLOOR2].SetOverrideMat(&mat);
 
 	Setup(mModels[Modelid::BACKGROUND], mesh, Vector3(30, 0, 30), Vector3(0, -3, 10), Vector3(0, 0, 0));
-	Material mat2;
-	mat2 = mModels[Modelid::BACKGROUND].GetMesh().GetSubMesh(0).material;
-	mat2.gfxData.Set(Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 1));
-	mat2.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "sparkle.dds");
-	mat2.texture = "sparkle.dds";
-	mModels[Modelid::BACKGROUND].SetOverrideMat(&mat2);
+	mat = mModels[Modelid::BACKGROUND].GetMesh().GetSubMesh(0).material;
+	mat.gfxData.Set(Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 1));
+	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "fog.dds");
+	mat.texture = "fog.dds";
+	mModels[Modelid::BACKGROUND].SetOverrideMat(&mat);
 
 	Setup(mModels[Modelid::BACKGROUND2], mesh, Vector3(30, 0, 30), Vector3(0, -3, 70), Vector3(0, 0, 0));
-	mModels[Modelid::BACKGROUND2].SetOverrideMat(&mat2);
+	mModels[Modelid::BACKGROUND2].SetOverrideMat(&mat);
 }
 
 void Map::Render() 
@@ -63,12 +62,12 @@ void Map::Scroll(float dTime)
 		mModels[Modelid::FLOOR2].GetPosition().z = mModels[Modelid::FLOOR].GetPosition().z + 40;
 	}
 
-	if (mModels[Modelid::BACKGROUND].GetPosition().z <= -20)
+	if (mModels[Modelid::BACKGROUND].GetPosition().z <= -40)
 	{
 		mModels[Modelid::BACKGROUND].GetPosition().z = mModels[Modelid::BACKGROUND2].GetPosition().z + 60;
 	}
 
-	if (mModels[Modelid::BACKGROUND2].GetPosition().z <= -20)
+	if (mModels[Modelid::BACKGROUND2].GetPosition().z <= -40)
 	{
 		mModels[Modelid::BACKGROUND2].GetPosition().z = mModels[Modelid::BACKGROUND].GetPosition().z + 60;
 	}
