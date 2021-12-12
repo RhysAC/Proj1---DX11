@@ -16,9 +16,11 @@ void Player::Init(BulletMgr& mgr, Mesh& sm)
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	// Player for now 
 	Setup(mModel, sm, Vector3(0.5, 0.5, 0.5), Vector3(0, 0, 5), Vector3(0, 0, 0));
-	Material mat;
 	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "player.dds");
 	mModel.SetOverrideMat(&mat);
+	tag = "Player";
+	active = true;
+	mRadius = 1;
 	mSpeed = 5;
 }
 
@@ -30,7 +32,6 @@ void Player::Update(float dTime)
 void Player::HandleInput(float dTime) 
 {
 	Vector3 pos{ mModel.GetPosition() };
-	float rotation = mModel.GetRotation().y;
 
 	if (sMKIn.IsPressed(VK_W) ||
 		sMKIn.IsPressed(VK_D) ||
@@ -40,15 +41,6 @@ void Player::HandleInput(float dTime)
 			pos.x += mSpeed * dTime;
 		else if (sMKIn.IsPressed(VK_A))
 			pos.x -= mSpeed * dTime;
-	}
-
-	if (sMKIn.IsPressed(VK_LEFT) ||
-		sMKIn.IsPressed(VK_RIGHT))
-	{
-		if (sMKIn.IsPressed(VK_LEFT))
-			rotation -= mSpeed * dTime;
-		else if (sMKIn.IsPressed(VK_RIGHT))
-			rotation += mSpeed * dTime;
 	}
 
 	if (pos.x <= CONSTANTS::LEFT_BOUNDS)
@@ -61,7 +53,11 @@ void Player::HandleInput(float dTime)
 		FireBullet(pos, Vector3{ 0,0,1});
 
 	mModel.GetPosition() = pos;
-	mModel.GetRotation().y = rotation;
+}
+
+void Player::Hit(GameObject& other)
+{
+
 }
 
 void Player::FireBullet(Vector3& pos, Vector3& aimDirNorm)
@@ -79,6 +75,6 @@ void Player::FireBullet(Vector3& pos, Vector3& aimDirNorm)
 void Player::Render() 
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
-
+	if(active)
 	d3d.GetFX().Render(mModel);
 }

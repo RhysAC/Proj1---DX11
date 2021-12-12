@@ -6,7 +6,8 @@
 #include "GeometryBuilder.h"
 #include "D3D.h"
 #include "Input.h"
-
+#include "Map.h"
+#include <vector>
 class GameObject
 {
 public:
@@ -20,8 +21,18 @@ public:
 		mSpeed = mSpeed;
 	}
 
+	void CheckCollision(std::vector<GameObject*>& objects);
+
+	virtual void Hit(GameObject& other) {
+		mSpeed = mSpeed;
+	};
+
 	Model mModel;
+	Material mat;
 	float mSpeed = 0;
+	float mRadius = 0;
 	bool active = false;
+	bool colliding = false;
+	std::string tag;
 };
 

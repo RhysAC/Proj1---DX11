@@ -10,6 +10,7 @@ public:
 	void Render();
 	void HandleInput(float dTime);
 	void FireBullet(DirectX::SimpleMath::Vector3& pos, DirectX::SimpleMath::Vector3& aimDirNorm);
+	void Hit(GameObject& other);
 	MouseAndKeys sMKIn;
 	BulletMgr* pBulletMgr = nullptr;
 };

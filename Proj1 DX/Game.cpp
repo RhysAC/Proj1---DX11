@@ -15,7 +15,7 @@ void Game::Load()
 	Mesh& sm = BuildCube(d3d.GetMeshMgr());
 	mMap.Init(m, quadMesh);
 	mPlayer.Init(mBulletMgr, sm);
-	mObstacle.Init(mPlayer, sm);
+	mObstacle.Init(mPlayer, sm, mMap);
 	mObjects.push_back(&mPlayer);
 	mObjects.push_back(&mObstacle);
 	for (Bullet& b : mBulletMgr.bullets)
@@ -41,6 +41,7 @@ void Game::Update(float dTime)
 	for (size_t i = 0; i < mObjects.size(); ++i)
 	{
 		mObjects[i]->Update(dTime);
+		mObjects[i]->CheckCollision(mObjects);
 	}
 	mMap.Scroll(dTime);
 	mBulletMgr.Update(dTime);

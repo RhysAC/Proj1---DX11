@@ -22,3 +22,11 @@ int GetPosOffScreen()
 	int pos = - 3 + rand() % 6;
 	return pos;
 }
+
+bool CircleToCircle(const Vector3& pos1, const Vector3& pos2, float minDist)
+{
+	float dist = (pos1.x - pos2.x) * (pos1.x - pos2.x) +
+		(pos1.z - pos2.z) * (pos1.z - pos2.z);
+	dist = sqrtf(dist);
+	return dist <= minDist;
+}

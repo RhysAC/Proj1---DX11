@@ -2,7 +2,6 @@
 #include "D3D.h"
 #include "GeometryBuilder.h"
 #include "Map.h"
-
 using namespace std;
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -10,7 +9,6 @@ using namespace DirectX::SimpleMath;
 void Map::Init(Model& m, Mesh& mesh) 
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
-
 	mModels.insert(mModels.begin(), Modelid::TOTAL, m);
 
 	//quad wood floor
@@ -47,8 +45,8 @@ void Map::Render()
 
 void Map::Scroll(float dTime) 
 {
-	mModels[Modelid::FLOOR].GetPosition().z -=  20 * dTime;
-	mModels[Modelid::FLOOR2].GetPosition().z -= 20 * dTime;
+	mModels[Modelid::FLOOR].GetPosition().z -= scrollSpeed * dTime;
+	mModels[Modelid::FLOOR2].GetPosition().z -= scrollSpeed * dTime;
 	mModels[Modelid::BACKGROUND].GetPosition().z -= 3 * dTime;
 	mModels[Modelid::BACKGROUND2].GetPosition().z -= 3 * dTime;
 
