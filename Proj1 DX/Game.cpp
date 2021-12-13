@@ -33,7 +33,7 @@ void Game::Initialise()
 	mPlayer.sMKIn.Initialise(WinUtil::Get().GetMainWnd(), true, false);
 	mpFontBatch = new SpriteBatch(&d3d.GetDeviceCtx());
 	assert(mpFontBatch);
-	mpFont = new SpriteFont(&d3d.GetDevice(), L"../bin/data/fonts/algerian.spritefont");
+	mpFont = new SpriteFont(&d3d.GetDevice(), L"../bin/data/fonts/Swipe.spritefont");
 	assert(mpFont);
 	Load();
 }
@@ -52,8 +52,11 @@ void Game::Update(float dTime)
 	switch (mState) 
 	{
 	case StateMachine::SPLASH_SCREEN:
+		mCamPos = mDefCamPos;
 		if (mPlayer.sMKIn.IsPressed(VK_P))
 			mState = StateMachine::PLAY;
+		mPlayer.MenuIdle(dTime);
+		mMap.Scroll(dTime);
 		break;
 	case StateMachine::PLAY:
 		for (size_t i = 0; i < mObjects.size(); ++i)
@@ -65,6 +68,11 @@ void Game::Update(float dTime)
 		mBulletMgr.Update(dTime);
 
 		mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 7, mPlayer.mModel.GetPosition().z - 10);
+		if (mPlayer.mHealth <= 0) {
+			mState = StateMachine::SPLASH_SCREEN;
+			mMap.scrollSpeed = mMap.defScrollSpeed;
+			mPlayer.ResetPlayer();
+		}
 		break;
 	}
 }
@@ -93,8 +101,13 @@ void Game::RenderGame(float dTime)
 	case StateMachine::SPLASH_SCREEN:
 		msg = "Max Velocity";
 		RECT dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
-		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 2) - (dim.bottom / 2) };
-		mpFont->DrawString(mpFontBatch, msg.c_str(), pos);
+		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 5) - (dim.bottom / 2) };
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::SteelBlue, 0, Vector2(100, 0), Vector2(2, 2));
+		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 1.2f) - (dim.bottom / 2) };
+		msg = "Press P To Play";
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::White, 0, Vector2(80, 0), Vector2(1, 1));
+		mMap.Render();
+		mPlayer.Render();
 		break;
 	case StateMachine::PLAY:
 		mMap.Render();

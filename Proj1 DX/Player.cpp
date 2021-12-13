@@ -27,6 +27,9 @@ void Player::Init(BulletMgr& mgr, Mesh& sm)
 
 void Player::Update(float dTime)
 {
+	//Set these back to 0 otherwise rotation from the menu scene gets carried through
+	mModel.GetRotation().y = 0;
+	mModel.GetRotation().z = 0;
 	HandleInput(dTime);
 }
 
@@ -34,8 +37,7 @@ void Player::HandleInput(float dTime)
 {
 	Vector3 pos{ mModel.GetPosition() };
 
-	if (sMKIn.IsPressed(VK_W) ||
-		sMKIn.IsPressed(VK_D) ||
+	if (sMKIn.IsPressed(VK_D) ||
 		sMKIn.IsPressed(VK_A))
 	{
 		if (sMKIn.IsPressed(VK_D))
@@ -68,6 +70,19 @@ void Player::TakeDamage(int damage)
 	if (mHealth <= 0) {
 		active = false;
 	}
+}
+
+void Player::MenuIdle(float dTime) 
+{
+	mModel.GetRotation().y += 3 * dTime;
+	mModel.GetRotation().z += 1 * dTime;
+}
+
+void Player::ResetPlayer() 
+{
+	mModel.GetPosition() = Vector3(0, 0, 5);
+	mHealth = 3;
+	active = true;
 }
 
 void Player::FireBullet(Vector3& pos, Vector3& aimDirNorm)

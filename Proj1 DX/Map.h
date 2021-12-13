@@ -12,6 +12,7 @@ public:
 	void Scroll(float dTime);
 
 	float scrollSpeed = 10;
+	float defScrollSpeed = 10;
 	std::vector<Model> mModels;
 	enum Modelid { FLOOR, FLOOR2, BACKGROUND, BACKGROUND2, TOTAL = 4 };
 };

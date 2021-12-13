@@ -12,6 +12,8 @@ public:
 	void FireBullet(DirectX::SimpleMath::Vector3& pos, DirectX::SimpleMath::Vector3& aimDirNorm);
 	void Hit(GameObject& other);
 	void TakeDamage(int damage);
+	void MenuIdle(float dTime);
+	void ResetPlayer();
 	MouseAndKeys sMKIn;
 	BulletMgr* pBulletMgr = nullptr;
 };

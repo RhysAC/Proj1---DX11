@@ -36,7 +36,7 @@ public:
 		PLAY
 	};
 
-	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
+	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(0, 0, -2);
 	DirectX::SimpleMath::Vector3 mCamPos;
 
 	std::vector<GameObject*> mObjects;
