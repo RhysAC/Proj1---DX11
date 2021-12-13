@@ -29,7 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 {
 	srand(time(NULL));
 	int w(1024), h(768);
-	if (!WinUtil::Get().InitMainWindow(w, h, hInstance, "Fezzy", MainWndProc, true))
+	if (!WinUtil::Get().InitMainWindow(w, h, hInstance, "Max Velocity", MainWndProc, true))
 		assert(false);
 
 	MyD3D d3d;

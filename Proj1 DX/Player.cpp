@@ -20,8 +20,9 @@ void Player::Init(BulletMgr& mgr, Mesh& sm)
 	mModel.SetOverrideMat(&mat);
 	tag = "Player";
 	active = true;
+	mHealth = 3;
 	mRadius = 1;
-	mSpeed = 5;
+	mSpeed = 10;
 }
 
 void Player::Update(float dTime)
@@ -58,6 +59,15 @@ void Player::HandleInput(float dTime)
 void Player::Hit(GameObject& other)
 {
 
+}
+
+void Player::TakeDamage(int damage) 
+{
+	mHealth -= 1;
+
+	if (mHealth <= 0) {
+		active = false;
+	}
 }
 
 void Player::FireBullet(Vector3& pos, Vector3& aimDirNorm)

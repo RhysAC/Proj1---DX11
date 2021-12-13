@@ -27,10 +27,15 @@ public:
 		mSpeed = mSpeed;
 	};
 
+	virtual void TakeDamage(int damage) {
+		mHealth = mHealth;
+	};
+
 	Model mModel;
 	Material mat;
 	float mSpeed = 0;
 	float mRadius = 0;
+	int mHealth = 0;
 	bool active = false;
 	bool colliding = false;
 	std::string tag;

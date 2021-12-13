@@ -22,6 +22,7 @@ void WallObstacle::Update(float dTime)
 	mModel.GetPosition().z -= pMap->scrollSpeed * dTime;
 	if (mModel.GetPosition().z <= -5) 
 	{
+		active = true;
 		pMap->scrollSpeed += 1;
 		mModel.GetPosition().x = GetPosOffScreen();
 		mModel.GetPosition().z = 40;
@@ -32,7 +33,7 @@ void WallObstacle::Hit(GameObject& other)
 {
 	if (other.tag == "Player")
 	{
-		other.active = false;
+		other.TakeDamage(1);
 		active = false;
 	}
 }

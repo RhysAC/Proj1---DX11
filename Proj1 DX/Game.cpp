@@ -23,30 +23,50 @@ void Game::Load()
 
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-1, -3.f, 2), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 	d3d.GetFX().SetupDirectionalLight(1, true, Vector3(1, -3.f, 2), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
+
+	mState = StateMachine::SPLASH_SCREEN;
 }
 
 void Game::Initialise()
 {
+	MyD3D& d3d = WinUtil::Get().GetD3D();
 	mPlayer.sMKIn.Initialise(WinUtil::Get().GetMainWnd(), true, false);
-
+	mpFontBatch = new SpriteBatch(&d3d.GetDeviceCtx());
+	assert(mpFontBatch);
+	mpFont = new SpriteFont(&d3d.GetDevice(), L"../bin/data/fonts/algerian.spritefont");
+	assert(mpFont);
 	Load();
 }
 
 void Game::Release()
 {
+	delete mpFontBatch;
+	mpFontBatch = nullptr;
+
+	delete mpFont;
+	mpFont = nullptr;	
 }
 
 void Game::Update(float dTime)
 {
-	for (size_t i = 0; i < mObjects.size(); ++i)
+	switch (mState) 
 	{
-		mObjects[i]->Update(dTime);
-		mObjects[i]->CheckCollision(mObjects);
-	}
-	mMap.Scroll(dTime);
-	mBulletMgr.Update(dTime);
+	case StateMachine::SPLASH_SCREEN:
+		if (mPlayer.sMKIn.IsPressed(VK_P))
+			mState = StateMachine::PLAY;
+		break;
+	case StateMachine::PLAY:
+		for (size_t i = 0; i < mObjects.size(); ++i)
+		{
+			mObjects[i]->Update(dTime);
+			mObjects[i]->CheckCollision(mObjects);
+		}
+		mMap.Scroll(dTime);
+		mBulletMgr.Update(dTime);
 
-	mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 7, mPlayer.mModel.GetPosition().z - 10);
+		mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 7, mPlayer.mModel.GetPosition().z - 10);
+		break;
+	}
 }
 
 void Game::Render(float dTime)
@@ -57,22 +77,37 @@ void Game::Render(float dTime)
 void Game::RenderGame(float dTime)
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
+	WinUtil& wu = WinUtil::Get();
 	d3d.BeginRender(Colours::Black);
-
+	mpFontBatch->Begin();
 	d3d.GetFX().SetPerFrameConsts(d3d.GetDeviceCtx(), mCamPos);
 
 	CreateViewMatrix(d3d.GetFX().GetViewMatrix(), mCamPos, mPlayer.mModel.GetPosition(), Vector3(0, 1, 0));
 	CreateProjectionMatrix(d3d.GetFX().GetProjectionMatrix(), 0.25f * PI, WinUtil::Get().GetAspectRatio(), 1, 1000.f);
-	
-	mMap.Render();
 
-	for (size_t i = 0; i < mObjects.size(); ++i) 
+	string msg = " ";
+	Vector2 scrn{ (float)wu.GetClientWidth(), (float)wu.GetClientHeight() };
+	Vector2 pos = Vector2(0, 0);
+	switch (mState)
 	{
-		mObjects[i]->Render();
+	case StateMachine::SPLASH_SCREEN:
+		msg = "Max Velocity";
+		RECT dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
+		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 2) - (dim.bottom / 2) };
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos);
+		break;
+	case StateMachine::PLAY:
+		mMap.Render();
+
+		for (size_t i = 0; i < mObjects.size(); ++i)
+		{
+			mObjects[i]->Render();
+		}
+
+		mBulletMgr.Render();
+		break;
 	}
-
-	mBulletMgr.Render();
-
+	mpFontBatch->End();
 	d3d.EndRender();
 }
 

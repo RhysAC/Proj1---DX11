@@ -31,15 +31,20 @@ public:
 	void Release();
 	LRESULT WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+	enum class StateMachine {
+		SPLASH_SCREEN,
+		PLAY
+	};
+
 	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
 	DirectX::SimpleMath::Vector3 mCamPos;
 
 	std::vector<GameObject*> mObjects;
-
 	Map mMap;
 	Player mPlayer;
 	WallObstacle mObstacle;
 	BulletMgr mBulletMgr;
+	StateMachine mState;
 private:
 	//printing text
 	DirectX::SpriteBatch *mpFontBatch = nullptr;

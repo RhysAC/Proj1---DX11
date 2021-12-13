@@ -26,8 +26,7 @@ void Map::Init(Model& m, Mesh& mesh)
 	Setup(mModels[Modelid::BACKGROUND], mesh, Vector3(30, 0, 30), Vector3(0, -3, 10), Vector3(0, 0, 0));
 	mat = mModels[Modelid::BACKGROUND].GetMesh().GetSubMesh(0).material;
 	mat.gfxData.Set(Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 1));
-	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "fog.dds");
-	mat.texture = "fog.dds";
+	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "grid.dds");
 	mModels[Modelid::BACKGROUND].SetOverrideMat(&mat);
 
 	Setup(mModels[Modelid::BACKGROUND2], mesh, Vector3(30, 0, 30), Vector3(0, -3, 70), Vector3(0, 0, 0));
