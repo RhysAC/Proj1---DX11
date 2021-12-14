@@ -66,14 +66,31 @@ void Game::Update(float dTime)
 		}
 		mMap.Scroll(dTime);
 		mBulletMgr.Update(dTime);
-
+		mScore = mMap.scrollSpeed;
 		mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 7, mPlayer.mModel.GetPosition().z - 10);
 		if (mPlayer.mHealth <= 0) {
-			mState = StateMachine::SPLASH_SCREEN;
+			mState = StateMachine::GAME_OVER;
+			mData.SaveData(mName, mScore);
 			mMap.scrollSpeed = mMap.defScrollSpeed;
 			mPlayer.ResetPlayer();
 		}
 		break;
+	case StateMachine::GAME_OVER:
+		mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 10, mPlayer.mModel.GetPosition().z - 1);;
+		if (mPlayer.sMKIn.IsPressed(VK_SPACE))
+		{
+			mState = StateMachine::LEADERBOARD;
+			mData.RecoverData();
+			mData.SortAndUpdatePlayerData();
+		}
+		mPlayer.MenuIdle(dTime);
+		break;
+	case StateMachine::LEADERBOARD:
+		mMap.Scroll(dTime);
+		if (mPlayer.sMKIn.IsPressed(VK_T))
+		{
+			mState = StateMachine::SPLASH_SCREEN;
+		}
 	}
 }
 
@@ -96,16 +113,16 @@ void Game::RenderGame(float dTime)
 	string msg = " ";
 	Vector2 scrn{ (float)wu.GetClientWidth(), (float)wu.GetClientHeight() };
 	Vector2 pos = Vector2(0, 0);
+	RECT dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
 	switch (mState)
 	{
 	case StateMachine::SPLASH_SCREEN:
 		msg = "Max Velocity";
-		RECT dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
 		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 5) - (dim.bottom / 2) };
-		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::SteelBlue, 0, Vector2(100, 0), Vector2(2, 2));
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::SteelBlue, 0, Vector2(200, 0), Vector2(2, 2));
 		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 1.2f) - (dim.bottom / 2) };
 		msg = "Press P To Play";
-		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::White, 0, Vector2(80, 0), Vector2(1, 1));
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::White, 0, Vector2(250, 0), Vector2(1, 1));
 		mMap.Render();
 		mPlayer.Render();
 		break;
@@ -118,7 +135,37 @@ void Game::RenderGame(float dTime)
 		}
 
 		mBulletMgr.Render();
+
+		msg = "Velocity -- " + to_string(mScore).substr(0, 3);
+		dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
+		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 1.2f) - (dim.bottom / 2) };
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::White, 0, Vector2(0, 0), Vector2(1, 1));
 		break;
+	case StateMachine::GAME_OVER:
+		mPlayer.Render();
+		msg = "SCORE - " + to_string(mScore).substr(0, 3);
+		dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
+		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 5) - (dim.bottom / 2) };
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::SteelBlue, 0, Vector2(100, 0), Vector2(2, 2));
+		msg = "Press SPACE";
+		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 1.2f) - (dim.bottom / 2) };
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::White, 0, Vector2(60, 0), Vector2(1, 1));
+		break;
+	case StateMachine::LEADERBOARD:
+		mMap.Render();
+		for (size_t i = 0; i < 10; ++i)
+		{
+			string name;
+			string score;
+			if (mData.mPlayerData.size() > i) {
+				name = mData.mPlayerData[i].name.substr(0, 6);
+				score = mData.mPlayerData[i].score;
+			}
+			msg = name + "   " + score;
+			dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
+			pos = Vector2{ (scrn.x / 2) - (dim.right / 2), pos.y += 80.f};
+			mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::White, 0, Vector2(0, 0), Vector2(1, 1));
+		}
 	}
 	mpFontBatch->End();
 	d3d.EndRender();

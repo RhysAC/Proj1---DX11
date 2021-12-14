@@ -14,6 +14,9 @@
 #include "Player.h"
 #include "WallObstacle.h"
 #include "Bullet.h"
+#include "DataBase.h"
+#include <fstream>
+#include <ostream>
 /*
 Display a small scene and spin some models around
 */
@@ -33,7 +36,9 @@ public:
 
 	enum class StateMachine {
 		SPLASH_SCREEN,
-		PLAY
+		PLAY,
+		GAME_OVER,
+		LEADERBOARD
 	};
 
 	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(0, 0, -2);
@@ -49,7 +54,9 @@ private:
 	//printing text
 	DirectX::SpriteBatch *mpFontBatch = nullptr;
 	DirectX::SpriteFont *mpFont = nullptr;
-
+	float mScore = 0;
+	std::string mName = "Rhys";
+	DataBase mData;
 	//load all models
 	void Load();
 	//separate out in-game rendering

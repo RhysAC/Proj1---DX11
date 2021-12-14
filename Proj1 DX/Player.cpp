@@ -6,8 +6,8 @@ using namespace DirectX::SimpleMath;
 
 namespace CONSTANTS 
 {
-	const float LEFT_BOUNDS = -4;
-	const float RIGHT_BOUNDS = 4;
+	const float LEFT_BOUNDS = -5.5f;
+	const float RIGHT_BOUNDS = 5.5f;
 }
 
 void Player::Init(BulletMgr& mgr, Mesh& sm)
@@ -31,6 +31,12 @@ void Player::Update(float dTime)
 	mModel.GetRotation().y = 0;
 	mModel.GetRotation().z = 0;
 	HandleInput(dTime);
+	if (mModel.GetPosition().y <= -6) 
+	{
+		TakeDamage(1);
+		mModel.GetPosition().y = 0;
+		mModel.GetPosition().x = 0;
+	}
 }
 
 void Player::HandleInput(float dTime) 
@@ -47,9 +53,9 @@ void Player::HandleInput(float dTime)
 	}
 
 	if (pos.x <= CONSTANTS::LEFT_BOUNDS)
-		pos.x = CONSTANTS::LEFT_BOUNDS;
+		pos.y -= mSpeed * dTime;
 	if (pos.x >= CONSTANTS::RIGHT_BOUNDS)
-		pos.x = CONSTANTS::RIGHT_BOUNDS;
+		pos.y -= mSpeed * dTime;
 
 
 	if (sMKIn.IsPressed(VK_SPACE))

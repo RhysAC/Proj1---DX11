@@ -19,7 +19,7 @@ void Setup(Model& m, Mesh& source, float scale, const Vector3& pos, const Vector
 
 int GetPosOffScreen() 
 {
-	int pos = - 3 + rand() % 6;
+	int pos = - 4 + rand() % 8;
 	return pos;
 }
 

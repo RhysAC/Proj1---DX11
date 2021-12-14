@@ -9,11 +9,11 @@ void WallObstacle::Init(Player& player, Mesh& sm, Map& map)
 	pPlayer = &player;
 	pMap = &map;
 	MyD3D& d3d = WinUtil::Get().GetD3D();
-	Setup(mModel, sm, Vector3(1.5, 1, 1), Vector3(GetPosOffScreen(), 0, 40), Vector3(0, 0, 0));
+	Setup(mModel, sm, Vector3(2, 1, 1), Vector3(GetPosOffScreen(), 0, 40), Vector3(0, 0, 0));
 	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "wall.dds");
 	mModel.SetOverrideMat(&mat);
 	tag = "Wall";
-	mRadius = 1;
+	mRadius = 1.5f;
 	active = true;
 }
 

@@ -99,6 +99,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="D3DUtil.cpp" />
+    <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="WallObstacle.cpp" />
     <ClCompile Include="FX.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="D3DUtil.h" />
+    <ClInclude Include="DataBase.h" />
     <ClInclude Include="WallObstacle.h" />
     <ClInclude Include="FX.h" />
     <ClInclude Include="Game.h" />
