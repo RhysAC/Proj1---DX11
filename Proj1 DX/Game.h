@@ -55,7 +55,7 @@ private:
 	DirectX::SpriteBatch *mpFontBatch = nullptr;
 	DirectX::SpriteFont *mpFont = nullptr;
 	float mScore = 0;
-	std::string mName = "Rhys";
+	std::string mName;
 	DataBase mData;
 	//load all models
 	void Load();

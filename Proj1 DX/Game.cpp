@@ -70,18 +70,20 @@ void Game::Update(float dTime)
 		mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 7, mPlayer.mModel.GetPosition().z - 10);
 		if (mPlayer.mHealth <= 0) {
 			mState = StateMachine::GAME_OVER;
-			mData.SaveData(mName, mScore);
 			mMap.scrollSpeed = mMap.defScrollSpeed;
 			mPlayer.ResetPlayer();
 		}
 		break;
 	case StateMachine::GAME_OVER:
-		mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 10, mPlayer.mModel.GetPosition().z - 1);;
+		mCamPos = Vector3(mPlayer.mModel.GetPosition().x, 10, mPlayer.mModel.GetPosition().z - 1);
 		if (mPlayer.sMKIn.IsPressed(VK_SPACE))
 		{
 			mState = StateMachine::LEADERBOARD;
-			mData.RecoverData();
-			mData.SortAndUpdatePlayerData();
+			if (mName.size() > 1) {
+				mData.SaveData(mName, mScore);
+				mData.RecoverData();
+				mData.SortAndUpdatePlayerData();
+			}
 		}
 		mPlayer.MenuIdle(dTime);
 		break;
@@ -143,13 +145,14 @@ void Game::RenderGame(float dTime)
 		break;
 	case StateMachine::GAME_OVER:
 		mPlayer.Render();
-		msg = "SCORE - " + to_string(mScore).substr(0, 3);
+		msg = mName + " - " + to_string(mScore).substr(0, 3);
 		dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
 		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 5) - (dim.bottom / 2) };
-		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::SteelBlue, 0, Vector2(100, 0), Vector2(2, 2));
-		msg = "Press SPACE";
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::SteelBlue, 0, Vector2(80, 0), Vector2(2, 2));
+		msg = "Enter Name And Press SPACE";
+		dim = mpFont->MeasureDrawBounds(msg.c_str(), Vector2(0, 0));
 		pos = Vector2{ (scrn.x / 2) - (dim.right / 2), (scrn.y / 1.2f) - (dim.bottom / 2) };
-		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::White, 0, Vector2(60, 0), Vector2(1, 1));
+		mpFont->DrawString(mpFontBatch, msg.c_str(), pos, Colors::White, 0, Vector2(0, 0), Vector2(1, 1));
 		break;
 	case StateMachine::LEADERBOARD:
 		mMap.Render();
@@ -178,6 +181,10 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	{
 		// Respond to a keyboard event.
 	case WM_CHAR:
+		if (Game::mState == StateMachine::GAME_OVER) 
+		{
+			mName += wParam;
+		}
 		switch (wParam)
 		{
 		case 27:
