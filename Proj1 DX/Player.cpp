@@ -6,15 +6,15 @@ using namespace DirectX::SimpleMath;
 
 namespace CONSTANTS 
 {
+	//Edges of the map 
 	const float LEFT_BOUNDS = -5.5f;
 	const float RIGHT_BOUNDS = 5.5f;
 }
 
-void Player::Init(BulletMgr& mgr, Mesh& sm)
+void Player::Init(Bullet& bullet, Mesh& sm)
 {
-	pBulletMgr = &mgr;
+	pBullet = &bullet;
 	MyD3D& d3d = WinUtil::Get().GetD3D();
-	// Player for now 
 	Setup(mModel, sm, Vector3(0.5, 0.5, 0.5), Vector3(0, 0, 5), Vector3(0, 0, 0));
 	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "player.dds");
 	mModel.SetOverrideMat(&mat);
@@ -27,10 +27,11 @@ void Player::Init(BulletMgr& mgr, Mesh& sm)
 
 void Player::Update(float dTime)
 {
-	//Set these back to 0 otherwise rotation from the menu scene gets carried through
+	//Set these back to 0 otherwise rotation from the Idle function gets carried through
 	mModel.GetRotation().y = 0;
 	mModel.GetRotation().z = 0;
 	HandleInput(dTime);
+	// Once we have fallen off the map reset when we reach -6;
 	if (mModel.GetPosition().y <= -6) 
 	{
 		TakeDamage(1);
@@ -52,6 +53,7 @@ void Player::HandleInput(float dTime)
 			pos.x -= mSpeed * dTime;
 	}
 
+	// If we cross the edge of the map , make the player fall
 	if (pos.x <= CONSTANTS::LEFT_BOUNDS)
 		pos.y -= mSpeed * dTime;
 	if (pos.x >= CONSTANTS::RIGHT_BOUNDS)
@@ -62,11 +64,6 @@ void Player::HandleInput(float dTime)
 		FireBullet(pos, Vector3{ 0,0,1});
 
 	mModel.GetPosition() = pos;
-}
-
-void Player::Hit(GameObject& other)
-{
-
 }
 
 void Player::TakeDamage(int damage) 
@@ -91,15 +88,14 @@ void Player::ResetPlayer()
 	active = true;
 }
 
-void Player::FireBullet(Vector3& pos, Vector3& aimDirNorm)
+void Player::FireBullet(Vector3& pos, Vector3& aimDir)
 {
-	Bullet* b = pBulletMgr->NewBullet();
-	if (b)
+	assert(pBullet);
+	if (pBullet->active == false) 
 	{
-		b->active = true;
-		b->mModel.GetRotation().y = mModel.GetRotation().y;
-		b->currentVel = aimDirNorm * b->maxSpeed;
-		b->mModel.GetPosition() = pos;
+		pBullet->active = true;
+		pBullet->currentVel = aimDir * pBullet->maxSpeed;
+		pBullet->mModel.GetPosition() = pos;
 	}
 }
 

@@ -10,7 +10,6 @@ using namespace DirectX::SimpleMath;
 
 LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	//do something game specific here
 	switch (msg)
 	{
 		// Respond to a keyboard event.
@@ -36,6 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	if (!d3d.InitDirect3D())
 		assert(false);
 	WinUtil::Get().SetD3D(d3d);
+	//Set path for assets for ease later in the program
 	d3d.GetCache().SetAssetPath("data/");
 
 	Game game;
@@ -48,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 		if (canUpdateRender && dTime > 0)
 		{
 			game.Update(dTime);
-			game.Render(dTime);
+			game.Render();
 		}
 		dTime = WinUtil::Get().EndLoop(canUpdateRender);
 	}

@@ -4,37 +4,25 @@
 class Bullet : public GameObject
 {
 public:
+	//Default constructor
 	Bullet(){};
-	void Init(int num);
-	float maxSpeed = 50.f;
-	float timer = 0;
-	DirectX::SimpleMath::Vector3 currentVel{ 0, 0, 0 };
-};
-
-class BulletMgr
-{
-public:
-	BulletMgr()
-	{
-		bullets.insert(bullets.begin(), 7, Bullet());
-
-		for (size_t i = 0; i < bullets.size(); ++i)
-			bullets[i].Init(i);
-	};
-
+	/* A function to Initialise data for the bullet
+	*IN :
+	*OUT :
+	*PRE_CONDITION : The bullet object must exist 
+	*POST_CONDITION : Data for the bullet will be set, and the model with be given a mesh */
+	void Init();
+	/* A function to Update the bullet
+	*IN : float dTime
+	*OUT :
+	*PRE_CONDITION : The bullet object must exist, valid dTime must be passed 
+	*POST_CONDITION : The bullet will update accordingly */
 	void Update(float dTime);
-
+	//Render changes to the bullet
 	void Render();
-
-	Bullet* NewBullet()
-	{
-		size_t i = 0;
-		while (i < bullets.size() && bullets[i].active == true) ++i;
-		if (i >= bullets.size())
-			return nullptr;
-		bullets[i].active = true;
-		return &bullets[i];
-	}
-	//A vector to be populated with bullets
-	std::vector<Bullet> bullets;
+	float maxSpeed = 50.f;
+	//Timer tracks how long the bullet is active for
+	float timer = 0;
+	//Current velocity to be multiplied with max speed to give a direction of travel
+	DirectX::SimpleMath::Vector3 currentVel{ 0, 0, 0 };
 };

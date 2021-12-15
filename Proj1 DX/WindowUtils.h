@@ -56,7 +56,7 @@ public:
 private:
 	struct WinData
 	{
-		//all windows apps have these handles
+		//default handles for all windows apps
 		HINSTANCE hAppInst = 0;
 		HWND      hMainWnd = 0;
 		bool      appPaused = false;

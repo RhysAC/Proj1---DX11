@@ -19,6 +19,7 @@ void Setup(Model& m, Mesh& source, float scale, const Vector3& pos, const Vector
 
 int GetPosOffScreen() 
 {
+	//Get random value between -4 and + 4
 	int pos = - 4 + rand() % 8;
 	return pos;
 }
