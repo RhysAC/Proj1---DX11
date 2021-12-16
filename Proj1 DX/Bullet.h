@@ -20,9 +20,10 @@ public:
 	void Update(float dTime);
 	//Render changes to the bullet
 	void Render();
-	float maxSpeed = 50.f;
-	//Timer tracks how long the bullet is active for
-	float timer = 0;
 	//Current velocity to be multiplied with max speed to give a direction of travel
 	DirectX::SimpleMath::Vector3 currentVel{ 0, 0, 0 };
+	float maxSpeed = 50.f;
+private:
+	//Timer tracks how long the bullet is active for
+	float timer = 0;
 };

@@ -10,6 +10,8 @@ void Bullet::Init()
 	Mesh& sm = d3d.GetMeshMgr().CreateMesh("bullet");
 	sm.CreateFrom("data/two_mat_cube.fbx", d3d);
 	Setup(mModel, sm, 0.045f, Vector3(0, 0, 0), Vector3(PI / 2.f, 0, 0));
+	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "player.dds");
+	mModel.SetOverrideMat(&mat);
 	active = false;
 	mRadius = 0.5f;
 	tag = "Bullet";

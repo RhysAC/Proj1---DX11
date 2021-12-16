@@ -1,17 +1,16 @@
 #pragma once
 #include "GameObject.h"
-#include "Player.h"
-class WallObstacle : public GameObject
+class Energy : public GameObject
 {
 public:
 	//Default constructor
-	WallObstacle() {};
-	/* A function to Initialise data for the Wall Obstacles
+	Energy() {};
+	/* A function to Initialise data for the energy capsules
 	*IN : Mesh& sm, Map& map
 	*OUT :
 	*PRE_CONDITION : all passed in data must be valid and the objects must exist
 	*POST_CONDITION : the player and map pointers will be set and a mesh added to the wall's model */
-	void Init(Mesh& sm, Map& map);
+	void Init(Map& map);
 	/* A function to Update the Wall object
 	*IN : float dTime
 	*OUT :
@@ -24,7 +23,7 @@ public:
 	*PRE_CONDITION : The passed in object must be active in the scene
 	*POST_CONDITION : we will damage other objects and this one depending on what it has hit */
 	void Hit(GameObject& other);
-	//Render changes to the Wall Obstacle
+	//Render changes to the Energy object
 	void Render();
 private:
 	Map* pMap = nullptr;

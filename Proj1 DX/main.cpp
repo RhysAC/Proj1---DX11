@@ -1,6 +1,7 @@
 #include "WindowUtils.h"
 #include "D3D.h"
 #include "Game.h"
+#include "AudioMgrFMOD.h"
 #include <ctime>
 using namespace std;
 using namespace DirectX;
@@ -26,6 +27,7 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	PSTR cmdLine, int showCmd)
 {
+	File::initialiseSystem();
 	srand(time(NULL));
 	int w(1024), h(768);
 	if (!WinUtil::Get().InitMainWindow(w, h, hInstance, "Max Velocity", MainWndProc, true))
@@ -38,9 +40,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	//Set path for assets for ease later in the program
 	d3d.GetCache().SetAssetPath("data/");
 
+	AudioMgrFMOD audio;
+	audio.Initialise();
 	Game game;
-	game.Initialise();
-
+	game.Initialise(&audio);
+	unsigned int musicHdl;
+	audio.GetSongMgr()->Play("main", true, false, &musicHdl, 0.2f);
 	bool canUpdateRender;
 	float dTime = 0;
 	while (WinUtil::Get().BeginLoop(canUpdateRender))

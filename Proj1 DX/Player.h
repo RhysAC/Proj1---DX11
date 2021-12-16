@@ -20,12 +20,6 @@ public:
 	void Update(float dTime);
 	// Render the player model to the screen
 	void Render();
-	/* A function that changes data dependent upon the User's input
-	*IN : float dTime
-	*OUT :
-	*PRE_CONDITION : A valid dTime must be passed in. We must be getting input 
-	*POST_CONDITION : The player will move and fire bullets according to the user input*/
-	void HandleInput(float dTime);
 	/* A function to fire a bullet from the players current location
 	*IN : Vector3 pos, Vector3 aimDir
 	*OUT :
@@ -40,7 +34,14 @@ public:
 	void ResetPlayer();
 	// Mouse and key input
 	MouseAndKeys sMKIn;
+private:
 	// Pointer to the bullet object
 	Bullet* pBullet = nullptr;
+	/* A function that changes data dependent upon the User's input
+	*IN : float dTime
+	*OUT :
+	*PRE_CONDITION : A valid dTime must be passed in. We must be getting input
+	*POST_CONDITION : The player will move and fire bullets according to the user input*/
+	void HandleInput(float dTime);
 };
 

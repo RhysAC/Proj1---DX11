@@ -47,8 +47,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\..\assimp-4.1.0prebuilt\include;</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(LibraryPath);..\..\..\DirectXTK\Bin\Desktop_2017\Win32\Debug;..\..\..\assimp-4.1.0prebuilt\build_vs2017\code\debug;</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\..\assimp-4.1.0prebuilt\include;..\..\..\fmod\inc</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(LibraryPath);..\..\..\DirectXTK\Bin\Desktop_2017\Win32\Debug;..\..\..\assimp-4.1.0prebuilt\build_vs2017\code\debug;..\..\..\fmod\lib</LibraryPath>
     <OutDir>../bin/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -72,7 +72,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>assimp-vc140-mt.lib;Xinput9_1_0.lib;directxtk.lib;dxgi.lib;d3d11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc140-mt.lib;Xinput9_1_0.lib;directxtk.lib;dxgi.lib;d3d11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)fmodex_vc.lib;</AdditionalDependencies>
       <OutputFile>..\bin\$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
@@ -96,10 +96,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AudioMgr.cpp" />
+    <ClCompile Include="AudioMgrFMOD.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="D3DUtil.cpp" />
     <ClCompile Include="DataBase.cpp" />
+    <ClCompile Include="Energy.cpp" />
+    <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="TexCache.cpp" />
     <ClCompile Include="WallObstacle.cpp" />
     <ClCompile Include="FX.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -113,15 +118,18 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ShaderTypes.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="TexCache.cpp" />
     <ClCompile Include="WindowUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioMgr.h" />
+    <ClInclude Include="AudioMgrFMOD.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="D3DUtil.h" />
     <ClInclude Include="DataBase.h" />
+    <ClInclude Include="Energy.h" />
+    <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="TexCache.h" />
     <ClInclude Include="WallObstacle.h" />
     <ClInclude Include="FX.h" />
     <ClInclude Include="Game.h" />
@@ -135,8 +143,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="ShaderTypes.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="TexCache.h" />
     <ClInclude Include="WindowUtils.h" />
   </ItemGroup>
   <ItemGroup>

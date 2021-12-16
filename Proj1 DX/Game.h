@@ -15,6 +15,8 @@
 #include "WallObstacle.h"
 #include "Bullet.h"
 #include "DataBase.h"
+#include "AudioMgr.h"
+#include "Energy.h"
 #include <fstream>
 #include <ostream>
 
@@ -27,19 +29,19 @@ public:
 		Release();
 	}
 	/*A function to Update logic for the game
-	*IN : float Dtime
+	*IN : float Dtime, IAudioMgr* audio
 	*OUT :
-	*PRE_CONDITION : There must be valid objects in the vector to update 
+	*PRE_CONDITION : There must be valid objects in the vector to update. The pointer to audio must be valid
 	*POST_CONDITION : Game logic will be updated  */
 	void Update(float dTime);
 	//Render all models active in the scene
 	void Render();
 	/*A function to initialise certain data for the Game
-	*IN : 
+	*IN : IAudioMgr& audio
 	*OUT :
-	*PRE_CONDITION : game object must exist, a d3d device must be active
+	*PRE_CONDITION : game object must exist, a d3d device must be active, the pointer to audio must be valid
 	*POST_CONDITION : The state will be changed to the menu screen and data will be set */
-	void Initialise();
+	void Initialise(IAudioMgr* audio);
 	//Delete batches and set the pointers back to null
 	void Release();
 	//default message handler for recieving input, with an added lParam for 'Raw' input
@@ -62,6 +64,7 @@ public:
 	Player mPlayer;
 	WallObstacle mObstacle;
 	Bullet mBullet;
+	Energy mEnergy;
 	//Store the current state
 	StateMachine mState;
 private:

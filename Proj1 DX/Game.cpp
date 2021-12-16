@@ -19,12 +19,14 @@ void Game::Load()
 	mMap.Init(m, quadMesh);
 	mBullet.Init();
 	mPlayer.Init(mBullet, sm);
-	mObstacle.Init(mPlayer, sm, mMap);
+	mObstacle.Init(sm, mMap);
+	mEnergy.Init(mMap);
 
 	//Add objects to the GameObject vector
 	mObjects.push_back(&mPlayer);
 	mObjects.push_back(&mObstacle);
 	mObjects.push_back(&mBullet);
+	mObjects.push_back(&mEnergy);
 
 	//Set up 2 directional lights forming an 'X' to light both sides of the scene
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-1, -3.f, 2), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
@@ -34,7 +36,7 @@ void Game::Load()
 	mState = StateMachine::SPLASH_SCREEN;
 }
 
-void Game::Initialise()
+void Game::Initialise(IAudioMgr* audio)
 {
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	mPlayer.sMKIn.Initialise(WinUtil::Get().GetMainWnd(), true, false);
@@ -89,7 +91,7 @@ void Game::Update(float dTime)
 		if (mPlayer.sMKIn.IsPressed(VK_SPACE))
 		{
 			//If the user has entered a name, save it along with their score and change the scene 
-			if (mName.size() > 1) {
+			if (mName.size() >= 1) {
 				mData.SaveData(mName, mScore);
 				mData.RecoverData();
 				mData.SortAndUpdatePlayerData();
@@ -102,7 +104,7 @@ void Game::Update(float dTime)
 	case StateMachine::LEADERBOARD:
 		mMap.Scroll(dTime);
 		//Timer must be greater than 2 to avoid the last space bar press carrying through and changing this state
-		if (mPlayer.sMKIn.IsPressed(VK_SPACE) && timer > 2)
+		if (mPlayer.sMKIn.IsPressed(VK_SPACE) && timer > 1)
 		{
 			timer = 0;
 			mState = StateMachine::SPLASH_SCREEN;
